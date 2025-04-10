@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keito Shock Effect</title>
+    <style>
+        body {
+            background-color: #e0f8d0; /* Superlight green background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column; /* Stack the images and text vertically */
+            text-align: center; /* Center the text horizontally */
+        }
+
+        /* Normal and shocked image styling */
+        #keito-normal, #keito-shocked {
+            width: 150px; /* Set the initial size */
+            transition: transform 0.2s ease, filter 0.2s ease;
+            position: relative;
+        }
+
+        /* Initially, the shocked image is hidden */
+        #keito-shocked {
+            display: none;
+        }
+
+        /* Apply the shock effect on the shocked image */
+        #keito-shocked.shocked {
+            display: block;
+            transform: scale(1.5); /* Make the image bigger when shocked */
+            filter: brightness(0.7) contrast(1.5); /* Add a shock effect */
+        }
+
+        /* Dark green text styling */
+        #press-hold-text {
+            color: #006400; /* Dark Green */
+            font-size: 20px;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Normal Keito Image -->
+    <img id="keito-normal" src="images/keito-normal.jpg.jpg" alt="Keito Normal" />
+    <!-- Shocked Keito Image -->
+    <img id="keito-shocked" src="images/keito-shocked.jpg.jpg" alt="Keito Shocked" />
+
+    <!-- "Press and Hold" text -->
+<div id="press-hold-text">Press and Hold</div>
+
+    <script>
+        // Use 'var' for holdTimer to avoid scope issues
+        var holdTimer;
+        const holdTime = 500; // Time (in ms) to switch to shocked image
+
+        const keitoNormal = document.getElementById('keito-normal');
+        const keitoShocked = document.getElementById('keito-shocked');
+
+        // Function to handle the start of the hold action
+        function startHold() {
+            console.log("Mouse down: Hold started");
+            // Clear any existing timers
+            if (holdTimer) {
+                clearTimeout(holdTimer);
+            }
+
+            // Set a timer for 500ms hold
+            holdTimer = setTimeout(function() {
+                console.log("500ms reached: Switching to shocked image");
+                keitoNormal.style.display = 'none'; // Hide normal image
+                keitoShocked.style.display = 'block'; // Show shocked image
+            }, holdTime);
+        }
+
+        // Function to handle the release or stop of the hold action
+        function stopHold() {
+            console.log("Mouse up: Hold stopped");
+            // Cancel the timer if the mouse is released early
+            if (holdTimer) {
+                clearTimeout(holdTimer);
+            }
+            keitoNormal.style.display = 'block'; // Show normal image
+            keitoShocked.style.display = 'none'; // Hide shocked image
+        }
+
+        // Attach the event listeners for mouse and touch events
+        keitoNormal.addEventListener('mousedown', startHold);  // Mouse down (hold)
+        keitoNormal.addEventListener('touchstart', startHold); // Touch start (hold)
+
+        keitoNormal.addEventListener('mouseup', stopHold);    // Mouse up (release)
+        keitoNormal.addEventListener('touchend', stopHold);   // Touch end (release)
+
+        keitoNormal.addEventListener('mouseleave', stopHold); // Mouse leaves the image area
+        keitoNormal.addEventListener('touchmove', stopHold); // Touch move (if finger leaves image)
+    </script>
+</body>
+</html>
+
+
